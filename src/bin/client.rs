@@ -1,3 +1,4 @@
+use std::env;
 use std::io::{self, Write};
 use std::net::UdpSocket;
 use std::sync::mpsc::{self, Receiver, Sender};
@@ -6,7 +7,15 @@ use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
 fn main() -> std::io::Result<()> {
-    let socket = UdpSocket::bind("127.0.0.1:0")?; // Bind to any available port
+    // Get the local port from command-line arguments
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 2 {
+        eprintln!("Usage: {} <local_port>", args[0]);
+        return Ok(());
+    }
+    let local_port = &args[1];
+
+    let socket = UdpSocket::bind(format!("127.0.0.1:{}", local_port))?; // Bind to the specified port
     socket.connect("127.0.0.1:8080")?;
 
     // Set terminal to raw mode to capture single key presses
