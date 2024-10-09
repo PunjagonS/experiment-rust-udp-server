@@ -1,4 +1,4 @@
-# udp-server
+# experiment-rust-udp-server
 Game nes server project
 
 ## Running the Server
